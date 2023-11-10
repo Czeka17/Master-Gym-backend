@@ -2,12 +2,12 @@ const Post = require('../models/post')
 const HttpError = require('../models/http-error')
 const fs = require("fs")
 const createPost = async(req,res,next) => {
-    const {title,description,intro} = req.body
+    const {title,description,intro,image} = req.body
 
     const createdPost = new Post({
         title,
         description,
-        image:req.file.path,
+        image,
         intro
     })
 
@@ -60,17 +60,13 @@ const deletePost = async(req,res,next) => {
         const error = new HttpError('Nie udalo sie znalezc posta',404)
         return next(error)
     }
-    const imagePath = post.image
-
     try{
         await post.deleteOne({ _id: postId });
     }catch(err){
         const error = new HttpError('Nie udalo sie usunac posta',500)
         return next(error)
     }
-    fs.unlink(imagePath, err => {
-        console.log(err)
-    })
+
     res.status(200).json({message: "Post zostal usunięty."})
 }
 const getPosts = async(req,res,next) => {
