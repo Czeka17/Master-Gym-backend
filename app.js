@@ -41,13 +41,10 @@ app.use((error, req, res, next) => {
 	res.json({ message: error.message || "An unknown error occured!" });
 });
 mongoose
-  .connect('mongodb+srv://jczekanski123:t4hMR0lqpFZ7I4pK@dejv.p9bjtsg.mongodb.net/')
+  .connect(`${process.env.MONGODB}`)
   .then(() => {
     app.listen(5000);
   })
   .catch(err => {
     console.log(err)
   });
-
-
-
